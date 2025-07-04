@@ -5,15 +5,19 @@ import cors from "cors"
 
 const app = express()
 
-function successconnect() {
-    console.log("connect");
 
-}
-function failconnect() {
-    console.log("fail");
+mongoose.connect("mongodb+srv://Agalya:12345@cluster0.f2fptwz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+  .then(() => {
+    console.log("Connected to MongoDB");
 
-}
-mongoose.connect("mongodb+srv://Agalya:12345@cluster0.f2fptwz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0").then(successconnect).catch(failconnect)
+    app.listen(3000, () => {
+      console.log("Server running on port 3000");
+    });
+  })
+  .catch((err) => {
+    console.error("Failed to connect to MongoDB:", err.message);
+  });
+
 
 let userdataschema = new mongoose.Schema({
     name: String,
