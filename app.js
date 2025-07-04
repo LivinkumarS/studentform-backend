@@ -25,7 +25,7 @@ let userdataschema = new mongoose.Schema({
 })
 
 let studentbiodata = mongoose.model("Studentbiodata", userdataschema)
-app.use(cors)
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }))
 function handlehello(req, res) {
     console.log("request receive");
