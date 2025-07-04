@@ -7,7 +7,6 @@ const app = express()
 
 function successconnect() {
     console.log("connect");
-  app.listen(3000)
 
 }
 function failconnect() {
@@ -41,10 +40,10 @@ function handleactor(req, res) {
         res.status(202).json({ datareceived: true })
     }
     function sendfail(err) {
-        console.log(err)
-        res.status(400).json({
-            datareceived: false,
-            error:err
+        console.log(err);
+
+        res.status(200).json({
+            datareceived: false
 
         })
     }
@@ -59,6 +58,8 @@ function handleactor(req, res) {
 }
 app.post("/actorinfo", handleactor)
 
+
+app.listen(3000)
 
 
 
