@@ -9,7 +9,6 @@ function successconnect() {
     console.log("connect");
     app.listen(3000)
 
-
 }
 function failconnect() {
     console.log("fail");
@@ -59,10 +58,3 @@ function handleactor(req, res) {
 
 }
 app.post("/actorinfo", handleactor)
-
-
-
-
-
-
-
