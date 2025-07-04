@@ -7,6 +7,8 @@ const app = express()
 
 function successconnect() {
     console.log("connect");
+    app.listen(3000)
+
 
 }
 function failconnect() {
@@ -58,8 +60,6 @@ function handleactor(req, res) {
 }
 app.post("/actorinfo", handleactor)
 
-
-app.listen(3000)
 
 
 
