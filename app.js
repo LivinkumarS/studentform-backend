@@ -39,9 +39,10 @@ function handleactor(req, res) {
     function sendsuccess() {
         res.status(202).json({ datareceived: true })
     }
-    function sendfail() {
+    function sendfail(err) {
         res.status(400).json({
-            datareceived: false
+            datareceived: false,
+            error:err
 
         })
     }
