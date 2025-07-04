@@ -1,68 +1,67 @@
-import express from "express";
+import express from "express"
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
-import cors from "cors";
-import 'dotenv/config'; // For environment variables
+import cors from "cors"
 
-const app = express();
+const app = express()
 
-// Middleware
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+function successconnect() {
+    console.log("connect");
+  app.listen(3000)
 
-// Schema with validation
-const userdataschema = new mongoose.Schema({
-  name: { type: String, required: true },
-  age: { type: Number, min: 0 },
-  phone: { type: Number },
-  mail: { type: String, match: /.+\@.+\..+/ }, // Simple email validation
-  height: { type: Number },
-  ispresent: { type: String, enum: ['present', 'absent'] }, // Only allow these values
-});
+}
+function failconnect() {
+    console.log("fail");
 
-const Studentbiodata = mongoose.model("Studentbiodata", userdataschema);
+}
+mongoose.connect("mongodb+srv://Agalya:12345@cluster0.f2fptwz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0").then(successconnect).catch(failconnect)
 
-// Connect to MongoDB
-mongoose.connect("mongodb+srv://Agalya:12345@cluster0.f2fptwz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-  .then(() => {
-    console.log("Connected to MongoDB");
-    const port = process.env.PORT || 3000;
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
-    }).on('error', (err) => {
-      console.error("Server failed to start:", err.message);
-    });
-  })
-  .catch((err) => {
-    console.error("Failed to connect to MongoDB:", err.message);
-    process.exit(1); // Exit if DB connection fails
-  });
+let userdataschema = new mongoose.Schema({
+    name: String,
+    age: Number,
+    phone: Number,
+    mail: String,
+    height: Number,
+    ispresent: String,
+})
 
-// Routes
-app.get("/sayhello", (req, res) => {
-  console.log("request received");
-  res.status(200).json({ name: "vijay", age: 15, spouse: "sangeetha" });
-});
+let studentbiodata = mongoose.model("Studentbiodata", userdataschema)
+app.use(cors())
+app.use(bodyParser.urlencoded({ extended: true }))
+function handlehello(req, res) {
+    console.log("request receive");
+    res.status(200).json({ name: "vijay", age: 15, spouse: "sangeetha" })
 
-app.post("/actorinfo", async (req, res) => {
-  try {
-    console.log("data received:", req.body);
-    const newData = new Studentbiodata(req.body);
-    await newData.save();
-    res.status(201).json({ datareceived: true }); // 201 for resource creation
-  } catch (err) {
-    console.error(err.message);
-    res.status(400).json({ 
-      datareceived: false, 
-      error: err.message,
-      errors: err.errors // Mongoose validation errors if any
-    });
-  }
-});
+}
+app.get("/sayhello", handlehello)
 
-// Basic error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
-});
+function handleactor(req, res) {
+    console.log("data received");
+    function sendsuccess() {
+        res.status(202).json({ datareceived: true })
+    }
+    function sendfail(err) {
+        console.log(err)
+        res.status(400).json({
+            datareceived: false,
+            error:err
+
+        })
+    }
+    console.log(req.body);
+
+
+    let newData = new studentbiodata(req.body)
+    newData.save().then(sendsuccess).catch(sendfail)
+
+
+
+}
+app.post("/actorinfo", handleactor)
+
+
+
+
+
+
+
